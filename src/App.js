@@ -77,13 +77,18 @@ class App extends Component {
 
   selector = (e) => {
     var messages = this.state.messages;
-    console.log(e.target.tagName)
-    if(e.target.tagName === "BUTTON" || "I"){
-      var target = messages[e.target.id - 1];
-      target.selected === undefined ? target.selected = true : target.selected = !target.selected;
-      this.setState({
-        messages: messages
-      })
+    var allSpark;
+    if(e.target.tagName === "BUTTON" || e.target.tagName ===  "I"){
+      var allSelect = messages.map(item => item.selected);
+      var countSelects = messages.reduce((tally,current) => {
+        return tally += current.selected ? 1 : 0;
+      },0)
+      countSelects > 0 ? (countSelects === messages.length ? allSpark = "far fa-check-square" : allSpark = 'far fa-minus-square') : allSpark = 'far fa-square';
+      console.log("allSpark", allSpark)
+      // target.selected === undefined ? target.selected = true : target.selected = !target.selected;
+      // this.setState({
+      //   messages: messages
+      // })
       e.stopPropagation();
     }
     else{
