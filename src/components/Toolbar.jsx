@@ -2,16 +2,17 @@ import React from 'react';
 
 
 const Toolbar = (props) => {
+    console.log("allspark", props.allSpark)
     return(
         <div className="row toolbar">
             <div className="col-md-12">
                 <p className="pull-right"><span className="badge badge">2</span>unread messages</p>
                 <a className="btn btn-danger"><i className="fa fa-plus"></i></a>
                 <button onClick = {props.selector} className="btn btn-default">
-                    <i className="far fa-minus-square"></i>
+                    <i className={props.allSpark}></i>
                 </button>
-                <button className="btn btn-default">Mark As Read</button>
-                <button className="btn btn-default">Mark As Unread</button>
+                <button onClick={props.markRead} className="btn btn-default">Mark As Read</button>
+                <button onClick={props.markUnread} className="btn btn-default">Mark As Unread</button>
                 <select className="form-control label-select">
                     <option>Apply label</option>
                     <option value="dev">dev</option>

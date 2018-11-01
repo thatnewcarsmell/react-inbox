@@ -67,7 +67,8 @@ class App extends Component {
           "starred": true,
           "labels": []
         }
-      ]
+      ],
+      allSpark: 'far fa-minus-square'
     }
   }
   
@@ -78,18 +79,22 @@ class App extends Component {
   selector = (e) => {
     var messages = this.state.messages;
     var allSpark;
+    let allSparker;
     if(e.target.tagName === "BUTTON" || e.target.tagName ===  "I"){
-      var allSelect = messages.map(item => item.selected);
       var countSelects = messages.reduce((tally,current) => {
         return tally += current.selected ? 1 : 0;
       },0)
-      countSelects > 0 ? (countSelects === messages.length ? allSpark = "far fa-check-square" : allSpark = 'far fa-minus-square') : allSpark = 'far fa-square';
-      console.log("allSpark", allSpark)
-      // target.selected === undefined ? target.selected = true : target.selected = !target.selected;
-      // this.setState({
-      //   messages: messages
-      // })
-      e.stopPropagation();
+      var newSelectValues = countSelects > 0 ? countSelects === messages.length ? false : true : true;
+      let update = messages.map(x => {
+        return {
+          ...x,
+          selected: newSelectValues
+        }
+      })
+      this.setState({
+        messages: update,
+      })
+      allSparker = newSelectValues;
     }
     else{
       var target = messages[e.target.id - 1];
@@ -99,18 +104,38 @@ class App extends Component {
       })
       e.stopPropagation();
     }
+    var countSelects = this.state.messages.reduce((tally,current) => {
+      return tally += current.selected ? 1 : 0;
+    },0)
+    countSelects > 0 ? (countSelects === messages.length ? allSpark = "far fa-check-square" : allSpark = 'far fa-minus-square') : allSpark = 'far fa-square';
+    allSparker === true ? allSpark = 'far fa-check-square' : allSparker === undefined ? allSpark = allSpark: allSpark = 'far fa-square';
+    this.setState({
+      allSpark: allSpark
+    });
   }
 
   markRead = (e) => {
-    let trigger = e.target.type;
-
+    var messages = this.state.messages;
+    messages = messages.map(x => {
+      return {...x,
+      read: x.selected === true ? x.read = true : x.read = x.read
+      }
+    });
     this.setState({
-
+      messages: messages
     })
   }
   
   markUnread = () => {
-    
+    var messages = this.state.messages;
+    messages = messages.map(x => {
+      return {...x,
+      read: x.selected === true ? x.read = false : x.read = x.read
+      }
+    });
+    this.setState({
+      messages: messages
+    })
   }
 
   starMe = (e) => {
@@ -127,7 +152,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="container">
-          <Toolbar selector={this.selector}/>
+          <Toolbar markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
           <MessageList starMe={this.starMe} selector={this.selector} messages={this.state.messages}/>
         </div>
       </div>
