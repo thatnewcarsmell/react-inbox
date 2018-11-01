@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import Toolbar from './components/Toolbar.jsx'
-import Message from './components/Message.jsx'
 import MessageList from './components/MessageList.jsx'
 
 class App extends Component {
@@ -150,14 +149,31 @@ class App extends Component {
 
   labelMeElmo = (e) => {
     var messages = this.state.messages;
-    var labelToAdd = e.target.value;
-    messages = messages.map(x => {
-      x.selected === true ? x.labels.push(labelToAdd) : x.labels = x.labels
-      return {...x,
-      }
+    messages = messages.map(message => {
+      message.selected === true ? message.labels.length === 0 ? message.labels = [e.target.value] : (
+        message.labels = message.labels.reduce((newLabelArray) => {
+          newLabelArray.indexOf(e.target.value) === -1 ? newLabelArray.push(e.target.value) : newLabelArray = newLabelArray;
+          return newLabelArray; 
+        },[...message.labels])
+      ) : message.labels = message.labels;
+      return message;
     });
-    // messages = messages.map(x => x.selected === true ? x.labels.push(labelToAdd) : x.labels = x.labels);
-    console.log(messages)
+    this.setState({
+      messages: messages
+    })
+  }
+
+  unlabelMeElmo = (e) => {
+    var messages = this.state.messages;
+    messages = messages.map(message => {
+      message.selected === true ? (
+        message.labels = message.labels.reduce((newLabelArray) => {
+          newLabelArray.indexOf(e.target.value) !== -1 ? newLabelArray[newLabelArray.indexOf(e.target.value)] = "" : newLabelArray = newLabelArray;
+          return newLabelArray; 
+        },[...message.labels])
+      ) : message.labels = message.labels;
+      return message;
+    });
     this.setState({
       messages: messages
     })
@@ -167,7 +183,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="container">
-          <Toolbar labelMeElmo={this.labelMeElmo} messages={this.state.messages} markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
+          <Toolbar labelMeElmo={this.labelMeElmo} unlabelMeElmo={this.unlabelMeElmo} messages={this.state.messages} markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
           <MessageList starMe={this.starMe} selector={this.selector} messages={this.state.messages}/>
         </div>
       </div>

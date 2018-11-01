@@ -2,7 +2,6 @@ import React from 'react';
 
 
 const Toolbar = (props) => {
-    console.log("allspark", props.allSpark)
     return(
         <div className="row toolbar">
             <div className="col-md-12">
@@ -19,13 +18,13 @@ const Toolbar = (props) => {
                 <button onClick={props.markRead} className="btn btn-default">Mark As Read</button>
                 <button onClick={props.markUnread} className="btn btn-default">Mark As Unread</button>
                 <select onChange={props.labelMeElmo} className="form-control label-select">
-                    <option>Apply label</option>
+                    <option selected disabled>Apply label</option>
                     <option value="dev">dev</option>
                     <option value="personal">personal</option>
                     <option value="gschool">gschool</option>
                 </select>
-                <select className="form-control label-select">
-                    <option>Remove label</option>
+                <select onChange={props.unlabelMeElmo} className="form-control label-select">
+                    <option selected disabled>Remove label</option>
                     <option value="dev">dev</option>
                     <option value="personal">personal</option>
                     <option value="gschool">gschool</option>

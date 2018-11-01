@@ -3,7 +3,7 @@ import '../index.css';
 
 const Labeler = (props) => {
     return(
-        <span class="label label-warning">{props.label}</span>
+        <span className="label label-warning">{props.label}</span>
     );
 }
 
