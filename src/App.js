@@ -147,12 +147,27 @@ class App extends Component {
     })
     e.stopPropagation();
   }
+
+  labelMeElmo = (e) => {
+    var messages = this.state.messages;
+    var labelToAdd = e.target.value;
+    messages = messages.map(x => {
+      x.selected === true ? x.labels.push(labelToAdd) : x.labels = x.labels
+      return {...x,
+      }
+    });
+    // messages = messages.map(x => x.selected === true ? x.labels.push(labelToAdd) : x.labels = x.labels);
+    console.log(messages)
+    this.setState({
+      messages: messages
+    })
+  }
   
   render() {
     return (
       <div className="App">
         <div className="container">
-          <Toolbar markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
+          <Toolbar labelMeElmo={this.labelMeElmo} messages={this.state.messages} markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
           <MessageList starMe={this.starMe} selector={this.selector} messages={this.state.messages}/>
         </div>
       </div>

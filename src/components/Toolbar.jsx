@@ -6,14 +6,19 @@ const Toolbar = (props) => {
     return(
         <div className="row toolbar">
             <div className="col-md-12">
-                <p className="pull-right"><span className="badge badge">2</span>unread messages</p>
+                <p className="pull-right">
+                <span className="badge badge">{
+                    props.messages.reduce((tally,current) => {
+                        return tally += current.read ? 0 : 1;
+                    },0)
+                    }</span>unread messages</p>
                 <a className="btn btn-danger"><i className="fa fa-plus"></i></a>
                 <button onClick = {props.selector} className="btn btn-default">
                     <i className={props.allSpark}></i>
                 </button>
                 <button onClick={props.markRead} className="btn btn-default">Mark As Read</button>
                 <button onClick={props.markUnread} className="btn btn-default">Mark As Unread</button>
-                <select className="form-control label-select">
+                <select onChange={props.labelMeElmo} className="form-control label-select">
                     <option>Apply label</option>
                     <option value="dev">dev</option>
                     <option value="personal">personal</option>

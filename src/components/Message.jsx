@@ -3,6 +3,7 @@ import '../index.css';
 import Labeler from './Labeler.jsx';
 
 const Message = (props) => {
+    let listOTags = props.info.labels.map((item, i) => <Labeler key={i} label={item}/>)
 
     return(
         <div className={(props.info.read ? "row message read" + " " : "row message unread" + " ") + (props.info.selected ? " selected":"")} >
@@ -17,7 +18,7 @@ const Message = (props) => {
                 </div>
             </div>
             <div onClick = {props.selector} id={props.info.id} className="col-xs-11">
-                {/* <Labeler /> */}
+                {listOTags}
                 <a onClick={props.selector} id={props.info.id} href="#">{props.info.subject}</a>
             </div>
         </div>
