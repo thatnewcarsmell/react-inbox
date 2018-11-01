@@ -178,12 +178,26 @@ class App extends Component {
       messages: messages
     })
   }
+
+  delete = (e) => {
+    var messages = this.state.messages;
+    messages.map((x,i) => {
+      x.selected === true && messages.splice(i,1);
+    });
+    // messages.map((x,i) => {
+    //   x.id = i+1;
+    // })
+    console.log(messages)
+    this.setState({
+      messages: messages
+    })
+  }
   
   render() {
     return (
       <div className="App">
         <div className="container">
-          <Toolbar labelMeElmo={this.labelMeElmo} unlabelMeElmo={this.unlabelMeElmo} messages={this.state.messages} markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
+          <Toolbar delete={this.delete} labelMeElmo={this.labelMeElmo} unlabelMeElmo={this.unlabelMeElmo} messages={this.state.messages} markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
           <MessageList starMe={this.starMe} selector={this.selector} messages={this.state.messages}/>
         </div>
       </div>

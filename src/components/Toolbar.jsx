@@ -29,7 +29,7 @@ const Toolbar = (props) => {
                     <option value="personal">personal</option>
                     <option value="gschool">gschool</option>
                 </select>
-                <button className="btn btn-default">
+                <button onClick={props.delete} className="btn btn-default">
                     <i className="far fa-trash-alt"></i>
                 </button>
             </div>
