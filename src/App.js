@@ -69,6 +69,7 @@ class App extends Component {
       ],
       allSpark: 'far fa-minus-square'
     }
+    this.selector = this.selector.bind(this);
   }
   
   componentDidMount(){
@@ -103,7 +104,7 @@ class App extends Component {
       })
       e.stopPropagation();
     }
-    var countSelects = this.state.messages.reduce((tally,current) => {
+    countSelects = this.state.messages.reduce((tally,current) => {
       return tally += current.selected ? 1 : 0;
     },0)
     countSelects > 0 ? (countSelects === messages.length ? allSpark = "far fa-check-square" : allSpark = 'far fa-minus-square') : allSpark = 'far fa-square';
@@ -181,13 +182,14 @@ class App extends Component {
 
   delete = (e) => {
     var messages = this.state.messages;
-    messages.map((x,i) => {
-      x.selected === true && messages.splice(i,1);
+    messages = messages.map(item => (item.selected === undefined || item.selected === false) ? item:undefined);
+    messages = messages.filter(item => item !== undefined)
+    messages = messages.map((item,i) => {
+    return {
+      ...item,
+      id: i+1
+    }
     });
-    // messages.map((x,i) => {
-    //   x.id = i+1;
-    // })
-    console.log(messages)
     this.setState({
       messages: messages
     })
