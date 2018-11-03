@@ -1,16 +1,17 @@
 import React from 'react';
 
-
 const Toolbar = (props) => {
+    let unreadCount = props.messages.reduce((tally,current) => {
+        return tally += current.read ? 0 : 1;
+    },0);
+
     return(
         <div className="row toolbar">
             <div className="col-md-12">
                 <p className="pull-right">
                 <span className="badge badge">{
-                    props.messages.reduce((tally,current) => {
-                        return tally += current.read ? 0 : 1;
-                    },0)
-                    }</span>unread messages</p>
+                    unreadCount
+                }</span>{ unreadCount > 0 && unreadCount === 1 ? 'unread message' : 'unread messages' }</p>
                 <a className="btn btn-danger"><i className="fa fa-plus"></i></a>
                 <button onClick = {props.selector} className="btn btn-default">
                     <i className={props.allSpark}></i>
