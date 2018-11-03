@@ -10,7 +10,6 @@ class App extends Component {
       messages: [],
       allSpark: 'far fa-minus-square'
     }
-    this.selector = this.selector.bind(this);
   }
 
   componentDidMount(){
@@ -32,8 +31,6 @@ class App extends Component {
       }
     })
     .then(res => res.json())
-    .then(response => console.log('Success:', JSON.stringify(response)))
-    .catch(error => console.error('Error:', error));
   }
   
   selector = (e) => {
@@ -224,10 +221,16 @@ class App extends Component {
     var messages = this.state.messages;
     var target = messages[e.target.id - 1];
     target.displayed === undefined ? target.displayed = true : target.displayed = !target.displayed;
+    target.read = true;
     this.setState({
       messages: messages
     })
-    console.log('THISDEEK')
+    let body = {
+      "messageIds": [e.target.id],
+      "command": "read",
+      read: true
+    }
+    this.changeMyDB(body)
     e.stopPropagation();
   }
   
