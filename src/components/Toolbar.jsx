@@ -1,4 +1,5 @@
 import React from 'react';
+import Compose from './Compose';
 
 const Toolbar = (props) => {
     let unreadCount = props.messages.reduce((tally,current) => {
@@ -12,7 +13,9 @@ const Toolbar = (props) => {
                 <span className="badge badge">{
                     unreadCount
                 }</span>{ unreadCount > 0 && unreadCount === 1 ? 'unread message' : 'unread messages' }</p>
-                <a className="btn btn-danger"><i className="fa fa-plus"></i></a>
+                <a onClick={props.compose} className="btn btn-danger">
+                    <i className="fa fa-plus"></i>
+                </a>
                 <button onClick = {props.selector} className="btn btn-default">
                     <i className={props.allSpark}></i>
                 </button>

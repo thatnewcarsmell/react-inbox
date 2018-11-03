@@ -1,7 +1,7 @@
 import React from 'react';
 import '../index.css';  
-import Labeler from './Labeler.jsx';
-import Body from './Body.jsx';
+import Labeler from './Labeler';
+import Body from './Body';
 
 const Message = (props) => {
     let listOTags = props.info.labels.map((item, i) => <Labeler key={i} label={item}/>)

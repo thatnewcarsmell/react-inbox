@@ -2,14 +2,21 @@ import React, { Component } from 'react';
 import './index.css';
 import Toolbar from './components/Toolbar.jsx'
 import MessageList from './components/MessageList.jsx'
+import Compose from './components/Compose';
 
 class App extends Component {
   constructor(){
     super()
     this.state = {
       messages: [],
-      allSpark: 'far fa-minus-square'
+      allSpark: 'far fa-minus-square',
+      composeMenu: false,
+      newMessage: {
+        subject: "",
+        body: ""
+      }
     }
+    this.dispose = this.dispose.bind(this);
   }
 
   componentDidMount(){
@@ -233,12 +240,63 @@ class App extends Component {
     this.changeMyDB(body)
     e.stopPropagation();
   }
+
+  compose = (e) => {
+    var onOff = this.state.composeMenu;
+    onOff = !onOff
+    this.setState({composeMenu: onOff})
+  }
+
+  dispose = (e) => {
+    var messages = this.state.messages;
+    var body = this.state.newMessage.body;
+    console.log(body)
+    var subject = this.state.newMessage.subject;
+    e.target.id === "body" ? this.setState({body: e.target.value}) : this.setState({subject: e.target.value});
+    // let body = {
+      // "messageIds": [e.target.id],
+      // "command": "read",
+      // read: true
+    // }
+    // this.changeMyDB(body)
+  }
+  
   
   render() {
+    let onoff = this.state.onOff === true ? (
+    <form className="form-horizontal well">
+      <div className="form-group">
+          <div className="col-sm-8 col-sm-offset-2">
+              <h4>Compose Message</h4>
+          </div>
+      </div>
+      <div className="form-group">
+          <label htmlFor="subject" className="col-sm-2 control-label">Subject</label>
+          <div className="col-sm-8">
+              <input value={this.state.value.subject} onChange={this.dispose} type="text" className="form-control" id="subject" placeholder="Enter a subject" name="subject"/>
+          </div>
+      </div>
+      <div className="form-group">
+          <label htmlFor="body" className="col-sm-2 control-label">Body</label>
+          <div className="col-sm-8">
+              <textarea value={this.state.value.body} onChange={this.dispose} name="body" id="body" className="form-control"></textarea>
+          </div>
+      </div>
+      <div className="form-group">
+          <div className="col-sm-8 col-sm-offset-2">
+              <input type="submit" value="Send" className="btn btn-primary"/>
+          </div>
+      </div>
+    </form>
+    ) : (
+    false);
+
     return (
       <div className="App">
         <div className="container">
-          <Toolbar delete={this.delete} labelMeElmo={this.labelMeElmo} unlabelMeElmo={this.unlabelMeElmo} messages={this.state.messages} markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
+          {onoff}
+          <Toolbar compose={this.compose} delete={this.delete} labelMeElmo={this.labelMeElmo} unlabelMeElmo={this.unlabelMeElmo} messages={this.state.messages} markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
+          {this.state.composeMenu && <Compose value={this.state.newMessage} onChange={this.dispose}/>}
           <MessageList showMeBody={this.showMeBody} starMe={this.starMe} selector={this.selector} messages={this.state.messages}/>
         </div>
       </div>
