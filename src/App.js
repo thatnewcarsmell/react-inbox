@@ -11,10 +11,7 @@ class App extends Component {
       messages: [],
       allSpark: 'far fa-minus-square',
       composeMenu: false,
-      newMessage: {
-        subject: "",
-        body: ""
-      }
+      newMessage: {}
     }
     this.dispose = this.dispose.bind(this);
   }
@@ -38,6 +35,17 @@ class App extends Component {
       }
     })
     .then(res => res.json())
+  }
+
+  addMessage = (data) => {
+    fetch('http://localhost:8082/api/messages', {
+      method: 'POST', 
+      body: JSON.stringify(data), 
+      headers:{
+      'Content-Type': 'application/json'
+      }
+    })
+    .then(res => console.log(res.json()))
   }
   
   selector = (e) => {
@@ -248,55 +256,46 @@ class App extends Component {
   }
 
   dispose = (e) => {
-    var messages = this.state.messages;
-    var body = this.state.newMessage.body;
-    console.log(body)
-    var subject = this.state.newMessage.subject;
-    e.target.id === "body" ? this.setState({body: e.target.value}) : this.setState({subject: e.target.value});
-    // let body = {
-      // "messageIds": [e.target.id],
-      // "command": "read",
-      // read: true
+    if(e.target.id === "body"){
+      var body = e.target.value;
+      this.setState({
+        newMessage: body
+      })
+      console.log("body checked",body)
+    }
+    else if(e.target.id === "subject"){
+      var subject = e.target.value;
+      console.log("subject checked",subject)
+    }
+    else if(e.target.value === "Send"){
+      console.log("no submit, bitch!")
+      let body = {
+          subject: "subject",
+          body: "body"
+      }
+      this.addMessage(body)
+    }
+    // {
+    // "subject":"If we connect the sensor, we can get to the HDD port through the redundant IB firewall!",
+    // "read":true,
+    // "starred":true,
+    // "labels":[],
+    // "body":"Hey, it's Bilson,\n\nThe future is scary but you can’t just run back to the past because it’s familiar.",
+    // "id":8
     // }
-    // this.changeMyDB(body)
+    var messages = this.state.messages;
+    
+    
   }
   
   
   render() {
-    let onoff = this.state.onOff === true ? (
-    <form className="form-horizontal well">
-      <div className="form-group">
-          <div className="col-sm-8 col-sm-offset-2">
-              <h4>Compose Message</h4>
-          </div>
-      </div>
-      <div className="form-group">
-          <label htmlFor="subject" className="col-sm-2 control-label">Subject</label>
-          <div className="col-sm-8">
-              <input value={this.state.value.subject} onChange={this.dispose} type="text" className="form-control" id="subject" placeholder="Enter a subject" name="subject"/>
-          </div>
-      </div>
-      <div className="form-group">
-          <label htmlFor="body" className="col-sm-2 control-label">Body</label>
-          <div className="col-sm-8">
-              <textarea value={this.state.value.body} onChange={this.dispose} name="body" id="body" className="form-control"></textarea>
-          </div>
-      </div>
-      <div className="form-group">
-          <div className="col-sm-8 col-sm-offset-2">
-              <input type="submit" value="Send" className="btn btn-primary"/>
-          </div>
-      </div>
-    </form>
-    ) : (
-    false);
-
+  
     return (
       <div className="App">
         <div className="container">
-          {onoff}
           <Toolbar compose={this.compose} delete={this.delete} labelMeElmo={this.labelMeElmo} unlabelMeElmo={this.unlabelMeElmo} messages={this.state.messages} markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
-          {this.state.composeMenu && <Compose value={this.state.newMessage} onChange={this.dispose}/>}
+          {this.state.composeMenu && <Compose value={this.state.newMessage} dispose={this.dispose}/>}
           <MessageList showMeBody={this.showMeBody} starMe={this.starMe} selector={this.selector} messages={this.state.messages}/>
         </div>
       </div>
