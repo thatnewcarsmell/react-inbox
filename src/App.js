@@ -11,9 +11,7 @@ class App extends Component {
       messages: [],
       allSpark: 'far fa-minus-square',
       composeMenu: false,
-      newMessage: {}
     }
-    this.dispose = this.dispose.bind(this);
   }
 
   componentDidMount(){
@@ -255,37 +253,34 @@ class App extends Component {
     this.setState({composeMenu: onOff})
   }
 
-  dispose = (e) => {
+  logger = (e) => {
     if(e.target.id === "body"){
       var body = e.target.value;
       this.setState({
-        newMessage: body
+        body: body
       })
-      console.log("body checked",body)
     }
     else if(e.target.id === "subject"){
       var subject = e.target.value;
-      console.log("subject checked",subject)
+      this.setState({
+        subject: subject
+      })
     }
-    else if(e.target.value === "Send"){
-      console.log("no submit, bitch!")
-      let body = {
-          subject: "subject",
-          body: "body"
-      }
-      this.addMessage(body)
+  }
+
+  submitMessage = (e) => {
+    e.preventDefault();
+    let body = {
+        subject: this.state.subject,
+        body: this.state.body,
+        labels: [],
+        read: false,
+        starred: false,
+        id: this.state.messages.length + 1
     }
-    // {
-    // "subject":"If we connect the sensor, we can get to the HDD port through the redundant IB firewall!",
-    // "read":true,
-    // "starred":true,
-    // "labels":[],
-    // "body":"Hey, it's Bilson,\n\nThe future is scary but you can’t just run back to the past because it’s familiar.",
-    // "id":8
-    // }
-    var messages = this.state.messages;
-    
-    
+    this.state.messages.push(body);
+    this.setState({composeMenu: !this.state.composeMenu})
+    this.addMessage(body);
   }
   
   
@@ -295,7 +290,7 @@ class App extends Component {
       <div className="App">
         <div className="container">
           <Toolbar compose={this.compose} delete={this.delete} labelMeElmo={this.labelMeElmo} unlabelMeElmo={this.unlabelMeElmo} messages={this.state.messages} markRead={this.markRead} markUnread={this.markUnread} allSpark={this.state.allSpark} selector={this.selector}/>
-          {this.state.composeMenu && <Compose value={this.state.newMessage} dispose={this.dispose}/>}
+          {this.state.composeMenu && <Compose submitMessage={this.submitMessage} logger={this.logger}/>}
           <MessageList showMeBody={this.showMeBody} starMe={this.starMe} selector={this.selector} messages={this.state.messages}/>
         </div>
       </div>
